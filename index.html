@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>พอร์ตโฟลิโอ | นักออกแบบระบบและจัดการข้อมูล</title>
+  <meta name="description" content="พอร์ตโฟลิโอนักศึกษามหาวิทยาลัยกรุงเทพ">
+  <meta name="theme-color" content="#0a1f44">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Sarabun:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0a1f44;
+      --navy-deep: #06142e;
+      --orange: #ff7a1a;
+      --orange-soft: #ffa25c;
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, .74);
+      --glass: rgba(255, 255, 255, .09);
+      --glass-strong: rgba(255, 255, 255, .14);
+      --glass-line: rgba(255, 255, 255, .2);
+      --bg-img: none;
+      --font-head: "Kanit", "Sarabun", system-ui, sans-serif;
+      --font-body: "Sarabun", "Kanit", system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--navy-deep);
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, p { margin: 0; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; border-radius: 6px; }
+
+    /* ---------- พื้นหลังตึก BU (ตรึงตลอดหน้า) ---------- */
+    .backdrop {
+      position: fixed; inset: 0; z-index: -1; overflow: hidden;
+      background:
+        radial-gradient(60% 50% at 85% 10%, rgba(255, 122, 26, .38), transparent 70%),
+        radial-gradient(70% 60% at 10% 90%, rgba(40, 90, 190, .45), transparent 70%),
+        linear-gradient(160deg, #10306b, var(--navy-deep));
+    }
+    .backdrop::before {
+      content: ""; position: absolute; inset: -24px;
+      background: var(--bg-img), none;
+      background-size: cover; background-position: center;
+      filter: blur(4px) saturate(1.1);
+    }
+    .backdrop::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(6, 20, 46, .42) 0%, rgba(6, 20, 46, .72) 55%, rgba(6, 20, 46, .88) 100%);
+    }
+
+    /* ---------- เมนู ---------- */
+    .nav {
+      position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+      z-index: 20; width: min(720px, calc(100% - 24px));
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 8px 10px 8px 20px; border-radius: 999px;
+      background: rgba(6, 20, 46, .45);
+      border: 1px solid var(--glass-line);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      backdrop-filter: blur(18px) saturate(150%);
+    }
+    .nav__brand { font-family: var(--font-head); font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .nav__links { display: flex; gap: 4px; }
+    .nav__links a {
+      padding: 6px 14px; border-radius: 999px; text-decoration: none;
+      font-family: var(--font-head); font-size: .95rem; color: var(--muted);
+      transition: background .2s, color .2s;
+    }
+    .nav__links a:hover { background: var(--glass-strong); color: #fff; }
+
+    /* ---------- ส่วนทั่วไป ---------- */
+    .wrap { width: min(1080px, 100% - 40px); margin-inline: auto; }
+    .section { padding: 96px 0 24px; }
+    .section__head { margin-bottom: 36px; max-width: 560px; }
+    .section__head h2 {
+      font-family: var(--font-head); font-weight: 600;
+      font-size: clamp(1.9rem, 4vw, 2.5rem); line-height: 1.3;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .section__head h2::before {
+      content: ""; width: 8px; height: 1.1em; border-radius: 4px;
+      background: linear-gradient(180deg, var(--orange), var(--orange-soft));
+    }
+    .section__head p { margin-top: 8px; color: var(--muted); }
+
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--glass-line);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      backdrop-filter: blur(16px) saturate(140%);
+      box-shadow: 0 10px 40px rgba(2, 8, 24, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
+    }
+
+    /* ---------- หน้าแรก ---------- */
+    .hero {
+      min-height: 100svh; display: flex; align-items: center;
+      padding: 120px 0 72px;
+    }
+    .hero__inner { max-width: 760px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 7px 18px 7px 8px; border-radius: 999px;
+      font-size: .98rem; color: var(--muted);
+    }
+    .chip__dot {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--orange), #ffb27a);
+      box-shadow: 0 0 0 4px rgba(255, 122, 26, .22);
+    }
+    .chip strong { color: #fff; font-weight: 600; }
+    .hero h1 {
+      margin-top: 28px;
+      font-family: var(--font-head); font-weight: 600;
+      font-size: clamp(2.3rem, 6.2vw, 4.1rem); line-height: 1.22;
+      text-wrap: balance;
+    }
+    .hero h1 .en {
+      display: block; margin-top: 6px;
+      font-weight: 400; font-size: .56em; color: var(--orange-soft);
+    }
+    .hero__sub {
+      margin-top: 24px; max-width: 600px;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem); color: var(--muted);
+    }
+    .hero__cta { margin-top: 36px; display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 28px; border-radius: 999px; text-decoration: none;
+      font-family: var(--font-head); font-weight: 500; font-size: 1.02rem;
+      transition: transform .2s, background .2s, box-shadow .2s;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn--solid { background: var(--orange); color: var(--navy-deep); box-shadow: 0 8px 26px rgba(255, 122, 26, .38); }
+    .btn--solid:hover { background: var(--orange-soft); }
+    .btn--glass { background: var(--glass); border: 1px solid var(--glass-line); color: #fff; -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+    .btn--glass:hover { background: var(--glass-strong); }
+
+    /* จังหวะเปิดหน้า: หัวข้อเลื่อนขึ้นทีละบรรทัด (ครั้งเดียว) */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero .reveal { opacity: 0; transform: translateY(22px); animation: rise .8s cubic-bezier(.2, .7, .2, 1) forwards; }
+      .hero .reveal:nth-child(1) { animation-delay: .05s; }
+      .hero .reveal:nth-child(2) { animation-delay: .2s; }
+      .hero .reveal:nth-child(3) { animation-delay: .38s; }
+      .hero .reveal:nth-child(4) { animation-delay: .55s; }
+    }
+    @keyframes rise { to { opacity: 1; transform: none; } }
+
+    /* ---------- ทักษะ ---------- */
+    .skills-core { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .skill-card { padding: 30px; border-radius: 28px; }
+    .skill-card__icon {
+      width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center;
+      background: linear-gradient(135deg, var(--orange), #ff9a4d); color: var(--navy-deep);
+    }
+    .skill-card__icon svg { width: 28px; height: 28px; }
+    .skill-card h3 { margin-top: 20px; font-family: var(--font-head); font-weight: 600; font-size: 1.4rem; line-height: 1.4; }
+    .skill-card p { margin-top: 8px; color: var(--muted); }
+    .skills-extra { margin-top: 28px; padding: 26px 30px; border-radius: 24px; }
+    .skills-extra h3 { font-family: var(--font-head); font-weight: 500; font-size: 1.1rem; margin-bottom: 16px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; margin: 0; list-style: none; }
+    .tag {
+      padding: 6px 16px; border-radius: 999px; font-size: .98rem; line-height: 1.6;
+      background: rgba(255, 255, 255, .08); border: 1px solid var(--glass-line);
+    }
+    .tag--accent { background: rgba(255, 122, 26, .18); border-color: rgba(255, 162, 92, .55); color: #ffe2cc; }
+
+    /* ---------- ผลงาน ---------- */
+    .projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .project { display: flex; flex-direction: column; border-radius: 24px; overflow: hidden; }
+    .project__visual {
+      aspect-ratio: 16 / 10; display: grid; place-items: center; padding: 18px;
+      background: linear-gradient(145deg, rgba(10, 31, 68, .75), rgba(255, 122, 26, .22));
+      border-bottom: 1px solid var(--glass-line);
+    }
+    .project__visual svg { width: 100%; height: 100%; }
+    .project__body { display: flex; flex-direction: column; flex: 1; padding: 24px 24px 26px; }
+    .project h3 { font-family: var(--font-head); font-weight: 600; font-size: 1.22rem; line-height: 1.45; }
+    .project__desc { margin-top: 10px; color: var(--muted); font-size: 1rem; line-height: 1.7; }
+    .project ul.hl { margin: 14px 0 0; padding-left: 1.2em; color: var(--muted); font-size: .98rem; line-height: 1.7; }
+    .project ul.hl li::marker { color: var(--orange); }
+    .project .tags { margin-top: 18px; }
+    .project .tag { font-size: .9rem; padding: 3px 14px; }
+    .project__link {
+      margin-top: auto; padding-top: 20px; align-self: flex-start;
+      font-family: var(--font-head); font-weight: 500; color: var(--orange-soft);
+      text-decoration: underline; text-underline-offset: 5px; text-decoration-thickness: 2px;
+    }
+    .project__link:hover { color: #fff; }
+
+    /* ---------- ติดต่อ ---------- */
+    .contact { padding: 40px; border-radius: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+    .contact h2 { font-family: var(--font-head); font-weight: 600; font-size: clamp(1.8rem, 4vw, 2.4rem); line-height: 1.3; }
+    .contact p { margin-top: 10px; color: var(--muted); }
+    .contact__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .contact__list a {
+      display: flex; flex-direction: column; padding: 14px 20px; border-radius: 18px; text-decoration: none;
+      background: rgba(255, 255, 255, .07); border: 1px solid var(--glass-line);
+      transition: background .2s, border-color .2s;
+    }
+    .contact__list a:hover { background: var(--glass-strong); border-color: var(--orange-soft); }
+    .contact__list small { color: var(--orange-soft); font-family: var(--font-head); font-size: .88rem; line-height: 1.5; }
+    .contact__list span { word-break: break-all; line-height: 1.5; }
+
+    .footer { padding: 48px 0 40px; text-align: center; color: var(--muted); font-size: .95rem; }
+
+    .notice { margin: 140px auto; padding: 28px; max-width: 560px; border-radius: 24px; }
+    .notice h2 { font-family: var(--font-head); font-size: 1.3rem; }
+    .notice p { margin-top: 8px; color: var(--muted); }
+
+    /* ---------- มือถือ / แท็บเล็ต ---------- */
+    @media (max-width: 960px) {
+      .projects { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .nav__brand { display: none; }
+      .nav { justify-content: center; padding: 8px; }
+      .section { padding-top: 72px; }
+      .skills-core, .projects, .contact { grid-template-columns: 1fr; }
+      .contact { padding: 28px 22px; }
+      .skill-card, .skills-extra { padding: 24px 22px; }
+      .hero { padding-top: 104px; }
+      .btn { flex: 1 1 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .btn, .nav__links a, .contact__list a { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <header class="nav" id="nav" hidden>
+    <a class="nav__brand" href="#top" id="navBrand"></a>
+    <nav class="nav__links" aria-label="เมนูหลัก">
+      <a href="#skills">ทักษะ</a>
+      <a href="#projects">ผลงาน</a>
+      <a href="#contact">ติดต่อ</a>
+    </nav>
+  </header>
+
+  <main id="app">
+    <p class="wrap" style="padding-top:140px;color:rgba(255,255,255,.7)">กำลังโหลดข้อมูล...</p>
+  </main>
+
+  <script>
+    /* ---------- เครื่องมือช่วย ---------- */
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    const ICONS = {
+      database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/><path d="M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg>',
+      layout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3.5" width="18" height="17" rx="3"/><path d="M3 9h18M9 9v11.5"/></svg>'
+    };
+
+    /* ภาพประกอบงานแบบเวกเตอร์ (ไม่ต้องใช้ไฟล์รูป) */
+    const VISUALS = {
+      database: `<svg viewBox="0 0 320 200" role="img" aria-label="แผนภาพความสัมพันธ์ของตารางฐานข้อมูล">
+        <g fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.55)" stroke-width="1.5">
+          <rect x="16" y="22" width="90" height="70" rx="10"/><rect x="214" y="22" width="90" height="70" rx="10"/>
+          <rect x="115" y="112" width="90" height="70" rx="10"/>
+        </g>
+        <g stroke="#ff7a1a" stroke-width="2" fill="none" stroke-linecap="round">
+          <path d="M106 52h46v60"/><path d="M214 52h-46"/><path d="M168 112V52"/>
+        </g>
+        <g fill="#ff7a1a"><circle cx="106" cy="52" r="4"/><circle cx="214" cy="52" r="4"/><circle cx="160" cy="112" r="4"/></g>
+        <g fill="rgba(255,255,255,.6)">
+          <rect x="28" y="36" width="44" height="6" rx="3"/><rect x="28" y="52" width="60" height="4" rx="2" opacity=".5"/><rect x="28" y="64" width="52" height="4" rx="2" opacity=".5"/>
+          <rect x="226" y="36" width="44" height="6" rx="3"/><rect x="226" y="52" width="60" height="4" rx="2" opacity=".5"/><rect x="226" y="64" width="52" height="4" rx="2" opacity=".5"/>
+          <rect x="127" y="126" width="44" height="6" rx="3"/><rect x="127" y="142" width="60" height="4" rx="2" opacity=".5"/><rect x="127" y="154" width="52" height="4" rx="2" opacity=".5"/>
+        </g></svg>`,
+      interface: `<svg viewBox="0 0 320 200" role="img" aria-label="ต้นแบบหน้าจอเว็บพอร์ทัล">
+        <rect x="26" y="14" width="190" height="130" rx="12" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+        <rect x="26" y="14" width="190" height="24" rx="12" fill="rgba(255,255,255,.14)"/>
+        <rect x="40" y="52" width="70" height="8" rx="4" fill="rgba(255,255,255,.7)"/>
+        <rect x="40" y="70" width="160" height="26" rx="13" fill="rgba(255,255,255,.14)" stroke="rgba(255,255,255,.4)"/>
+        <rect x="40" y="108" width="44" height="22" rx="8" fill="#ff7a1a"/><rect x="92" y="108" width="44" height="22" rx="8" fill="rgba(255,255,255,.18)"/><rect x="144" y="108" width="44" height="22" rx="8" fill="rgba(255,255,255,.18)"/>
+        <rect x="232" y="44" width="68" height="140" rx="14" fill="rgba(255,255,255,.1)" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+        <rect x="244" y="62" width="44" height="7" rx="3.5" fill="rgba(255,255,255,.7)"/>
+        <rect x="244" y="78" width="44" height="22" rx="7" fill="rgba(255,255,255,.14)"/><rect x="244" y="106" width="44" height="22" rx="7" fill="rgba(255,255,255,.14)"/><rect x="244" y="134" width="44" height="22" rx="7" fill="#ff7a1a"/>
+        <circle cx="52" cy="168" r="9" fill="none" stroke="#ff7a1a" stroke-width="2"/><path d="M62 168h120" stroke="#ff7a1a" stroke-width="2" stroke-dasharray="3 6" stroke-linecap="round"/></svg>`,
+      dashboard: `<svg viewBox="0 0 320 200" role="img" aria-label="แดชบอร์ดกราฟยอดขาย">
+        <rect x="14" y="14" width="292" height="172" rx="14" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.5)" stroke-width="1.5"/>
+        <g fill="rgba(255,255,255,.55)">
+          <rect x="38" y="112" width="26" height="52" rx="5"/><rect x="74" y="92" width="26" height="72" rx="5"/>
+          <rect x="110" y="126" width="26" height="38" rx="5"/><rect x="146" y="78" width="26" height="86" rx="5" fill="#ff7a1a"/>
+          <rect x="182" y="102" width="26" height="62" rx="5"/>
+        </g>
+        <path d="M38 70 C80 40, 110 84, 150 52 S 200 40, 214 58" fill="none" stroke="#ffa25c" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="244" cy="76" r="30" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="12"/>
+        <circle cx="244" cy="76" r="30" fill="none" stroke="#ff7a1a" stroke-width="12" stroke-dasharray="110 190" transform="rotate(-90 244 76)"/>
+        <rect x="226" y="126" width="62" height="7" rx="3.5" fill="rgba(255,255,255,.6)"/><rect x="226" y="142" width="44" height="6" rx="3" fill="rgba(255,255,255,.35)"/></svg>`
+    };
+
+    /* ---------- สร้างหน้าเว็บจาก data.json ---------- */
+    function render(d) {
+      document.title = d.site.title;
+      document.querySelector('meta[name="description"]').content = d.site.description;
+      if (d.site.backgroundImage) {
+        document.documentElement.style.setProperty("--bg-img", `url("${d.site.backgroundImage}")`);
+      }
+
+      const nav = document.getElementById("nav");
+      document.getElementById("navBrand").textContent = d.profile.name;
+      nav.hidden = false;
+
+      const core = d.skills.core.map((s) => `
+        <article class="skill-card glass">
+          <div class="skill-card__icon">${ICONS[s.icon] || ICONS.database}</div>
+          <h3>${esc(s.name)}</h3>
+          <p>${esc(s.description)}</p>
+        </article>`).join("");
+
+      const extra = d.skills.extra.map((t) => `<li class="tag">${esc(t)}</li>`).join("");
+
+      const projects = d.projects.items.map((p) => `
+        <article class="project glass">
+          <div class="project__visual">${VISUALS[p.visual] || ""}</div>
+          <div class="project__body">
+            <h3>${esc(p.title)}</h3>
+            <p class="project__desc">${esc(p.description)}</p>
+            <ul class="hl">${p.highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
+            <ul class="tags">${p.focus.map((f) => `<li class="tag tag--accent">${esc(f)}</li>`).join("")}</ul>
+            <a class="project__link" href="${esc(p.link)}">${esc(p.linkText)}</a>
+          </div>
+        </article>`).join("");
+
+      const contacts = d.contact.links.map((c) => `
+        <li><a href="${esc(c.url)}" ${c.url.startsWith("http") ? 'target="_blank" rel="noopener"' : ""}>
+          <small>${esc(c.label)}</small><span>${esc(c.text)}</span></a></li>`).join("");
+
+      document.getElementById("app").innerHTML = `
+        <section class="hero" id="top">
+          <div class="wrap hero__inner">
+            <p class="chip glass reveal"><span class="chip__dot"></span><span><strong>${esc(d.profile.name)}</strong> · ${esc(d.profile.detail)}</span></p>
+            <h1 class="reveal">${esc(d.hero.title)}<span class="en">${esc(d.hero.titleEn)}</span></h1>
+            <p class="hero__sub reveal">${esc(d.hero.subtitle)}</p>
+            <div class="hero__cta reveal">
+              <a class="btn btn--solid" href="${esc(d.hero.primaryButton.link)}">${esc(d.hero.primaryButton.text)}</a>
+              <a class="btn btn--glass" href="${esc(d.hero.secondaryButton.link)}">${esc(d.hero.secondaryButton.text)}</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="skills">
+          <div class="wrap">
+            <div class="section__head"><h2>${esc(d.skills.title)}</h2><p>${esc(d.skills.subtitle)}</p></div>
+            <div class="skills-core">${core}</div>
+            <div class="skills-extra glass">
+              <h3>${esc(d.skills.extraTitle)}</h3>
+              <ul class="tags">${extra}</ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="projects">
+          <div class="wrap">
+            <div class="section__head"><h2>${esc(d.projects.title)}</h2><p>${esc(d.projects.subtitle)}</p></div>
+            <div class="projects">${projects}</div>
+          </div>
+        </section>
+
+        <section class="section" id="contact">
+          <div class="wrap">
+            <div class="contact glass">
+              <div><h2>${esc(d.contact.title)}</h2><p>${esc(d.contact.subtitle)}</p></div>
+              <ul class="contact__list">${contacts}</ul>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer"><div class="wrap">${esc(d.footer)}</div></footer>`;
+    }
+
+    function showError(err) {
+      console.error(err);
+      document.getElementById("app").innerHTML = `
+        <div class="notice glass">
+          <h2>โหลดข้อมูลไม่สำเร็จ</h2>
+          <p>ไม่พบหรืออ่านไฟล์ data.json ไม่ได้ หากเปิดไฟล์โดยดับเบิลคลิกจากเครื่อง เบราว์เซอร์จะบล็อกการอ่านไฟล์ JSON
+          ให้เปิดผ่าน GitHub Pages หรือใช้ Live Server ใน VS Code แทน</p>
+        </div>`;
+    }
+
+    fetch("data.json")
+      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(render)
+      .catch(showError);
+  </script>
+</body>
+</html>
